@@ -71,17 +71,78 @@ public class TestBank {
         if (!success) {
             System.out.println("Deposit failed. Balance: " + savings1.getBalance());
         }
-        
-        // CD withdrawal before maturity demonstration
-        System.out.println("\n--- CD Withdrawal Before Maturity Test ---");
-        System.out.println("User " + user1.getName() + " attempts to withdraw 5000 from CD account");
+
+        // Demonstrate CD withdrawal before maturity
+        System.out.println("\n--- CD Early Withdrawal Test ---");
+        System.out.println("User " + user1.getName() + " attempts to withdraw 5000 from CD");
         success = bank.withdraw(user1, cd1.getAccountNumber(), 5000.0);
         if (!success) {
-            System.out.println("Withdrawal failed. CD balance: " + cd1.getBalance());
+            System.out.println("Withdrawal failed, CD balance: " + cd1.getBalance());
         }
-        System.out.println("CD maturity date: " + ((CertificateOfDeposit) cd1).getMaturityDate());
-        System.out.println("CD is matured: " + ((CertificateOfDeposit) cd1).isMatured());
-        
+        System.out.println("CD Maturity Date: " + ((CertificateOfDeposit) cd1).getMaturityDate());
+        System.out.println("CD Is Matured: " + ((CertificateOfDeposit) cd1).isMatured());
+
+        // New: Account Closure Functionality Test
+        System.out.println("\n--- Account Closure Test ---");
+
+        // Test 1: Open a new account for user3 for closure testing
+        System.out.println("Opening new savings account for " + user3.getName() + " for closure test");
+        Account testAccount = bank.openAccount(user3, "savings", 0.0);
+        System.out.println("Opened test account: " + testAccount.getAccountNumber() + " (Balance: 0)");
+
+        // Test 2: Successful closure (zero balance)
+        System.out.println("\n[SUCCESS TEST] Attempt to close account with zero balance");
+        boolean closeSuccess = bank.closeAccount(user3, testAccount.getAccountNumber());
+        if (closeSuccess) {
+            System.out.println("✓ Account closed successfully! Account " + testAccount.getAccountNumber() + " has been closed");
+        } else {
+            System.out.println("✗ Account closure failed");
+        }
+
+        // Verify account list after closure
+        System.out.println("User " + user3.getName() + " current account count: " + user3.getAccounts().size());
+
+        // Test 3: Attempt to close non-existent account
+        System.out.println("\n[FAILURE TEST] Attempt to close non-existent account");
+        closeSuccess = bank.closeAccount(user3, "ACC999");
+        if (!closeSuccess) {
+            System.out.println("✗ Account closure failed (expected) - Account does not exist");
+        }
+
+        // Test 4: Attempt to close account with balance (warning message)
+        System.out.println("\n[WARNING TEST] Attempt to close account with balance");
+        System.out.println("User " + user2.getName() + "'s savings account balance: " + savings2.getBalance());
+        closeSuccess = bank.closeAccount(user2, savings2.getAccountNumber());
+        if (closeSuccess) {
+            System.out.println("⚠ Account closed successfully, but system issued balance warning");
+        } else {
+            System.out.println("✗ Account closure failed");
+        }
+
+        // Check if user3 has any remaining accounts
+        if (user3.getAccounts().isEmpty()) {
+            System.out.println("User " + user3.getName() + " has no accounts, attempting user removal");
+            boolean removeUserSuccess = bank.removeUser(user3.getUserId());
+            if (removeUserSuccess) {
+                System.out.println("✓ User removed successfully: " + user3.getUserId());
+            } else {
+                System.out.println("✗ User removal failed");
+            }
+        }
+
+        // Test 5: Remove user after closing their last account
+        System.out.println("\n[COMPREHENSIVE TEST] Account cleanup before user removal");
+        System.out.println("User " + user3.getName() + " current account count: " + user3.getAccounts().size());
+
+        // Test 6: Attempt to remove user who still has accounts (should fail)
+        System.out.println("\n[FAILURE TEST] Attempt to remove user with active accounts");
+        System.out.println("User " + user1.getName() + " current account count: " + user1.getAccounts().size());
+        boolean removeUserSuccess = bank.removeUser(user1.getUserId());
+        if (!removeUserSuccess) {
+            System.out.println("✗ User removal failed (expected) - User still has accounts");
+        }
+
+
         // User displays account reports
         System.out.println("\n--- User Account Reports ---");
         user1.displayAccountsReport();
