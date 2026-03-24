@@ -1,0 +1,32 @@
+The Online Banking Project
+
+Create a new project, and within the Project, create a set of classes that could be used to represent the backend of an online banking application.
+
+You will need to create a class to represent the bank itself, a class to represent each user and then a set of classes for bank accounts that could be made available from the bank to each user (eg. Savings, Checking and CD[Certificate of Deposit] ).
+
+The Bank class will allow users to open or close accounts. It will also be possible to deposit and withdraw money from an account, that the user owns.
+
+Depositing a negative value should raise an exception.
+
+Attempting to withdraw more than the account balance should report an error (to the terminal).
+
+CDs cannot be withdrawn from until they mature. You need to ensure that this business rule is met.
+
+The Bank should be able to display a report showing the users and the user should be able to display a report of their accounts.
+
+Do not create more than 6 items of each type in your bank to demonstrate a working example.
+
+Write a TestBank class with main to demonstrate the functionality of the classes.
+
+Pay particular attention to:
+
+Appropriate application of concepts such as encapsulation, inheritance and polymorphism
+Appropriate use of properties / methods
+Appropriate use of abstract classes and interfaces
+Suitable constructors if required
+Appropriate use of static properties / methods
+Readable and maintainable code
+A simple readme.md document specifying any design decisions and assumptions that you have made as you have implemented this project.
+You will have 10 minutes per team this afternoon (starting at 4 PM) to present your project to your peers and instructors (in English please).
+
+Bonus points if every member of the team speaks during the presentation.
