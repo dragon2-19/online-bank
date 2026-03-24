@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 用户类
+ * User class
  */
 public class User {
     private String userId;
@@ -30,32 +30,32 @@ public class User {
     }
     
     /**
-     * 开户
+     * Open account
      */
     public void openAccount(Account account) {
         if (account == null) {
-            throw new IllegalArgumentException("账户不能为空");
+            throw new IllegalArgumentException("Account cannot be null");
         }
         accounts.add(account);
     }
     
     /**
-     * 销户
+     * Close account
      */
     public boolean closeAccount(String accountNumber) {
         Account account = findAccount(accountNumber);
         if (account != null) {
             if (account.getBalance() > 0) {
-                System.out.println("警告：账户 " + accountNumber + " 仍有余额 " + account.getBalance());
+                System.out.println("Warning: Account " + accountNumber + " still has balance: " + account.getBalance());
             }
             return accounts.remove(account);
         }
-        System.err.println("错误：未找到账户 " + accountNumber);
+        System.err.println("Error: Account not found: " + accountNumber);
         return false;
     }
     
     /**
-     * 查找账户
+     * Find account
      */
     public Account findAccount(String accountNumber) {
         for (Account account : accounts) {
@@ -67,13 +67,13 @@ public class User {
     }
     
     /**
-     * 显示账户报告
+     * Display accounts report
      */
     public void displayAccountsReport() {
-        System.out.println("\n=== 用户账户报告 ===");
-        System.out.println("用户ID: " + userId);
-        System.out.println("用户名: " + name);
-        System.out.println("账户数量: " + accounts.size());
+        System.out.println("\n=== User Account Report ===");
+        System.out.println("User ID: " + userId);
+        System.out.println("User Name: " + name);
+        System.out.println("Number of Accounts: " + accounts.size());
         System.out.println("-------------------");
         
         for (Account account : accounts) {
@@ -82,12 +82,12 @@ public class User {
         }
         
         double totalBalance = calculateTotalBalance();
-        System.out.println("总余额: " + totalBalance);
+        System.out.println("Total Balance: " + totalBalance);
         System.out.println("===================\n");
     }
     
     /**
-     * 计算总余额
+     * Calculate total balance
      */
     private double calculateTotalBalance() {
         double total = 0;
@@ -99,6 +99,6 @@ public class User {
     
     @Override
     public String toString() {
-        return "用户 [ID: " + userId + ", 姓名: " + name + "]";
+        return "User [ID: " + userId + ", Name: " + name + "]";
     }
 }

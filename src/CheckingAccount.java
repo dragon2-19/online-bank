@@ -1,8 +1,8 @@
 /**
- * 支票账户类
+ * Checking Account class
  */
 public class CheckingAccount extends Account {
-    private static final double OVERDRAFT_LIMIT = 100.0; // 透支限额
+    private static final double OVERDRAFT_LIMIT = 100.0; // overdraft limit
     
     public CheckingAccount(String accountNumber, double initialBalance, User owner) {
         super(accountNumber, initialBalance, owner);
@@ -11,10 +11,10 @@ public class CheckingAccount extends Account {
     @Override
     public boolean withdraw(double amount) {
         if (amount < 0) {
-            throw new IllegalArgumentException("取款金额不能为负数");
+            throw new IllegalArgumentException("Cannot withdraw negative amount");
         }
         if (amount > balance + OVERDRAFT_LIMIT) {
-            System.err.println("错误：超出账户余额和透支限额");
+            System.err.println("Error: Exceeds balance and overdraft limit");
             return false;
         }
         this.balance -= amount;
@@ -27,14 +27,14 @@ public class CheckingAccount extends Account {
     
     @Override
     public void displayAccount() {
-        System.out.println("账户类型: 支票账户");
-        System.out.println("账户号码: " + accountNumber);
-        System.out.println("账户余额: " + balance);
-        System.out.println("透支限额: " + OVERDRAFT_LIMIT);
+        System.out.println("Account Type: Checking Account");
+        System.out.println("Account Number: " + accountNumber);
+        System.out.println("Account Balance: " + balance);
+        System.out.println("Overdraft Limit: " + OVERDRAFT_LIMIT);
     }
     
     @Override
     public String getAccountType() {
-        return "支票账户";
+        return "Checking Account";
     }
 }

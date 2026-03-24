@@ -1,134 +1,135 @@
-# 在线银行系统 (Online Banking System)
+# Online Banking System
 
-## 项目概述
+## Project Overview
 
-这是一个使用 Java 面向对象编程技术实现的在线银行系统后端。该系统演示了封装、继承、多态等 OOP 概念的应用。
+This is a Java-based online banking system backend that demonstrates object-oriented programming concepts including encapsulation, inheritance, and polymorphism.
 
-## 类结构
+## Class Structure
 
 ```
-Bank (银行)
-├── User (用户)
-│   └── Account (账户 - 抽象类)
-│       ├── SavingsAccount (储蓄账户)
-│       ├── CheckingAccount (支票账户)
-│       └── CertificateOfDeposit (定期存单)
+Bank (Bank)
+├── User (User)
+│   └── Account (Account - Abstract Class)
+│       ├── SavingsAccount (Savings Account)
+│       ├── CheckingAccount (Checking Account)
+│       └── CertificateOfDeposit (Certificate of Deposit)
 ```
 
-## 核心功能
+## Core Features
 
-### 1. Bank 类
-- 管理所有用户
-- 用户注册/注销
-- 账户开设/关闭
-- 存款/取款操作
-- 生成银行报告
+### 1. Bank Class
+- Manages all users
+- User registration/removal
+- Account opening/closing
+- Deposit/withdrawal operations
+- Generate bank reports
 
-### 2. User 类
-- 拥有多个账户
-- 管理自己的账户
-- 显示账户报告
-- 自动生成唯一用户 ID
+### 2. User Class
+- Owns multiple accounts
+- Manages own accounts
+- Display account reports
+- Auto-generates unique user IDs
 
-### 3. Account 类（抽象基类）
-- 账户号码
-- 余额
-- 账户拥有者
-- 抽象方法：displayAccount(), getAccountType()
-- 核心方法：deposit(), withdraw()
+### 3. Account Class (Abstract Base Class)
+- Account number
+- Balance
+- Account owner
+- Abstract methods: displayAccount(), getAccountType()
+- Core methods: deposit(), withdraw()
 
-### 4. SavingsAccount（储蓄账户）
-- 年利率：2%
-- 可应用利息
+### 4. SavingsAccount
+- Annual interest rate: 2%
+- Can apply interest
 
-### 5. CheckingAccount（支票账户）
-- 透支限额：100
-- 支持超出余额的取款（在限额内）
+### 5. CheckingAccount
+- Overdraft limit: 100
+- Supports withdrawals exceeding balance (within limit)
 
-### 6. CertificateOfDeposit（定期存单）
-- 到期日期
-- 可配置利率
-- **业务规则**：到期前不可取款
+### 6. CertificateOfDeposit
+- Maturity date
+- Configurable interest rate
+- **Business Rule**: Cannot withdraw before maturity
 
-## 设计决策与假设
+## Design Decisions and Assumptions
 
-### 1. 账户编号生成
-- 使用静态计数器 `accountCounter` 自动生成唯一的账户编号
-- 格式：ACC1, ACC2, ACC3...
+### 1. Account Number Generation
+- Uses static counter `accountCounter` to auto-generate unique account numbers
+- Format: ACC1, ACC2, ACC3...
 
-### 2. 用户 ID 生成
-- 使用静态计数器 `userCounter` 自动生成唯一的用户 ID
-- 格式：U1, U2, U3...
+### 2. User ID Generation
+- Uses static counter `userCounter` to auto-generate unique user IDs
+- Format: U1, U2, U3...
 
-### 3. 异常处理
-- 存入负值抛出 `IllegalArgumentException`
-- 取款超过余额在终端显示错误信息
-- CD 到期前取款在终端显示错误信息
+### 3. Exception Handling
+- Depositing negative values throws `IllegalArgumentException`
+- Withdrawals exceeding balance print error message to terminal
+- Withdrawals from CD before maturity print error message to terminal
 
-### 4. 业务规则实现
-- CD 账户的到期检查：`isMatured()` 方法比较当前日期与到期日期
-- 余额检查：在 `withdraw()` 方法中验证取款金额
+### 4. Business Rule Implementation
+- CD maturity check: `isMatured()` method compares current date with maturity date
+- Balance checking: Validated in `withdraw()` method
 
-### 5. 多态应用
-- `Account` 作为抽象基类定义通用接口
-- 不同账户类型实现各自特定的行为
-- 通过 `instanceof` 进行类型检查以调用特定方法
+### 5. Polymorphism Application
+- `Account` as abstract base class defines common interface
+- Different account types implement their specific behaviors
+- Type checking via `instanceof` to call specific methods
 
-### 6. 封装
-- 所有字段使用 `private` 或 `protected` 修饰
-- 通过 getter/setter 方法访问
-- 通过公开方法控制业务逻辑
+### 6. Encapsulation
+- All fields use `private` or `protected` modifiers
+- Access through getter/setter methods
+- Business logic controlled through public methods
 
-### 7. 静态成员
-- `userCounter` 和 `accountCounter` 使用 static 确保唯一性
-- `INTEREST_RATE` 和 `OVERDRAFT_LIMIT` 使用 static 作为常量
+### 7. Static Members
+- `userCounter` and `accountCounter` use static for uniqueness
+- `INTEREST_RATE` and `OVERDRAFT_LIMIT` use static as constants
 
-### 8. 测试类
-- `TestBank` 包含 main 方法
-- 演示所有核心功能
-- 每种类型不超过 6 个实例（3 个用户，每人最多 3 个账户）
+### 8. Test Class
+- `TestBank` contains main method
+- Demonstrates all core functionality
+- No more than 6 instances of each type (3 users, max 3 accounts each)
 
-## 编译与运行
+## Compilation and Execution
 
 ```bash
-# 编译所有 Java 文件
+# Compile all Java files
 javac src/*.java
 
-# 运行测试
+# Run tests
 java -cp src TestBank
 ```
 
-## 功能演示
+## Feature Demonstrations
 
-TestBank 类演示了以下功能：
-1. 创建银行
-2. 注册用户
-3. 开设不同类型的账户（储蓄、支票、CD）
-4. 存款操作
-5. 正常取款
-6. 余额不足的取款尝试
-7. 存入负值的异常处理
-8. CD 到期前取款的限制
-9. 用户账户报告
-10. 银行总用户报告
-11. 利息应用（多态演示）
-12. 银行总资产计算
+The TestBank class demonstrates the following features:
+1. Create bank
+2. Register users
+3. Open different account types (savings, checking, CD)
+4. Deposit operations
+5. Normal withdrawals
+6. Insufficient balance withdrawal attempts
+7. Negative value deposit exception handling
+8. CD pre-maturity withdrawal restrictions
+9. User account reports
+10. Bank all users report
+11. Interest application (polymorphism demo)
+12. Bank total assets calculation
 
-## 技术亮点
+## Technical Highlights
 
-1. **封装**：所有字段合理使用访问修饰符
-2. **继承**：账户类层次结构清晰
-3. **多态**：抽象类和接口的应用
-4. **抽象类**：Account 定义通用接口
-5. **静态成员**：计数器和常量的使用
-6. **异常处理**：合理的异常抛出和错误信息
-7. **业务规则**：CD 到期限制的实现
-8. **代码可读性**：清晰的命名和注释
+1. **Encapsulation**: All fields use appropriate access modifiers
+2. **Inheritance**: Clear account class hierarchy
+3. **Polymorphism**: Application of abstract classes and interfaces
+4. **Abstract Classes**: Account defines common interface
+5. **Static Members**: Counters and constants
+6. **Exception Handling**: Reasonable exception throwing and error messages
+7. **Business Rules**: CD maturity restrictions implementation
+8. **Code Readability**: Clear naming and comments
 
-## 扩展性
+## Extensibility
 
-该系统设计易于扩展：
-- 可添加新的账户类型
-- 可增加交易历史记录
-- 可实现用户认证
-- 可添加更多业务规则
+The system is designed for easy extension:
+- Can add new account types
+- Can add transaction history
+- Can implement user authentication
+- Can add more business rules
+

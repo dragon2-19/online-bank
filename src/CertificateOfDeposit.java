@@ -1,7 +1,7 @@
 import java.time.LocalDate;
 
 /**
- * 定期存单类（CD - Certificate of Deposit）
+ * Certificate of Deposit class (CD)
  */
 public class CertificateOfDeposit extends Account {
     private LocalDate maturityDate;
@@ -15,35 +15,35 @@ public class CertificateOfDeposit extends Account {
     }
     
     /**
-     * 获取到期日期
+     * Get maturity date
      */
     public LocalDate getMaturityDate() {
         return maturityDate;
     }
     
     /**
-     * 检查是否已到期
+     * Check if matured
      */
     public boolean isMatured() {
         return LocalDate.now().isAfter(maturityDate) || LocalDate.now().isEqual(maturityDate);
     }
     
     /**
-     * 取款 - 到期前不可取款
+     * Withdraw - cannot withdraw before maturity
      */
     @Override
     public boolean withdraw(double amount) {
         if (amount < 0) {
-            throw new IllegalArgumentException("取款金额不能为负数");
+            throw new IllegalArgumentException("Cannot withdraw negative amount");
         }
         
         if (!isMatured()) {
-            System.err.println("错误：定期存单尚未到期，到期日期为 " + maturityDate);
+            System.err.println("Error: CD not matured yet. Maturity date: " + maturityDate);
             return false;
         }
         
         if (amount > balance) {
-            System.err.println("错误：账户余额不足");
+            System.err.println("Error: Insufficient balance");
             return false;
         }
         
@@ -53,16 +53,16 @@ public class CertificateOfDeposit extends Account {
     
     @Override
     public void displayAccount() {
-        System.out.println("账户类型: 定期存单 (CD)");
-        System.out.println("账户号码: " + accountNumber);
-        System.out.println("账户余额: " + balance);
-        System.out.println("到期日期: " + maturityDate);
-        System.out.println("年利率: " + (interestRate * 100) + "%");
-        System.out.println("是否到期: " + (isMatured() ? "是" : "否"));
+        System.out.println("Account Type: Certificate of Deposit (CD)");
+        System.out.println("Account Number: " + accountNumber);
+        System.out.println("Account Balance: " + balance);
+        System.out.println("Maturity Date: " + maturityDate);
+        System.out.println("Annual Interest Rate: " + (interestRate * 100) + "%");
+        System.out.println("Is Matured: " + (isMatured() ? "Yes" : "No"));
     }
     
     @Override
     public String getAccountType() {
-        return "定期存单";
+        return "Certificate of Deposit";
     }
 }

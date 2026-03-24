@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 银行类
+ * Bank class
  */
 public class Bank {
     private String bankName;
@@ -23,7 +23,7 @@ public class Bank {
     }
     
     /**
-     * 用户注册
+     * Register user
      */
     public User registerUser(String userName) {
         User user = new User(userName);
@@ -32,23 +32,23 @@ public class Bank {
     }
     
     /**
-     * 注销用户
+     * Remove user
      */
     public boolean removeUser(String userId) {
         User user = findUser(userId);
         if (user != null) {
             if (!user.getAccounts().isEmpty()) {
-                System.out.println("警告：用户仍有账户，无法注销");
+                System.out.println("Warning: User still has accounts, cannot remove");
                 return false;
             }
             return users.remove(user);
         }
-        System.err.println("错误：未找到用户 " + userId);
+        System.err.println("Error: User not found: " + userId);
         return false;
     }
     
     /**
-     * 查找用户
+     * Find user
      */
     public User findUser(String userId) {
         for (User user : users) {
@@ -60,11 +60,11 @@ public class Bank {
     }
     
     /**
-     * 开户
+     * Open account
      */
     public Account openAccount(User user, String accountType, double initialBalance) {
         if (user == null) {
-            throw new IllegalArgumentException("用户不能为空");
+            throw new IllegalArgumentException("User cannot be null");
         }
         
         String accountNumber = "ACC" + (++accountCounter);
@@ -78,9 +78,9 @@ public class Bank {
                 account = new CheckingAccount(accountNumber, initialBalance, user);
                 break;
             case "cd":
-                throw new IllegalArgumentException("CD 账户需要指定期限和利率");
+                throw new IllegalArgumentException("CD account requires term and interest rate");
             default:
-                throw new IllegalArgumentException("未知账户类型: " + accountType);
+                throw new IllegalArgumentException("Unknown account type: " + accountType);
         }
         
         user.openAccount(account);
@@ -88,11 +88,11 @@ public class Bank {
     }
     
     /**
-     * 开户（CD 需要额外参数）
+     * Open CD account (requires additional parameters)
      */
     public Account openCDAccount(User user, double initialBalance, int termMonths, double interestRate) {
         if (user == null) {
-            throw new IllegalArgumentException("用户不能为空");
+            throw new IllegalArgumentException("User cannot be null");
         }
         
         String accountNumber = "ACC" + (++accountCounter);
@@ -104,21 +104,21 @@ public class Bank {
     }
     
     /**
-     * 销户
+     * Close account
      */
     public boolean closeAccount(User user, String accountNumber) {
         if (user == null) {
-            throw new IllegalArgumentException("用户不能为空");
+            throw new IllegalArgumentException("User cannot be null");
         }
         return user.closeAccount(accountNumber);
     }
     
     /**
-     * 存款
+     * Deposit
      */
     public boolean deposit(User user, String accountNumber, double amount) {
         if (user == null) {
-            throw new IllegalArgumentException("用户不能为空");
+            throw new IllegalArgumentException("User cannot be null");
         }
         Account account = user.findAccount(accountNumber);
         if (account != null) {
@@ -126,37 +126,37 @@ public class Bank {
                 account.deposit(amount);
                 return true;
             } catch (IllegalArgumentException e) {
-                System.err.println("错误: " + e.getMessage());
+                System.err.println("Error: " + e.getMessage());
                 return false;
             }
         }
-        System.err.println("错误：未找到账户 " + accountNumber);
+        System.err.println("Error: Account not found: " + accountNumber);
         return false;
     }
     
     /**
-     * 取款
+     * Withdraw
      */
     public boolean withdraw(User user, String accountNumber, double amount) {
         if (user == null) {
-            throw new IllegalArgumentException("用户不能为空");
+            throw new IllegalArgumentException("User cannot be null");
         }
         Account account = user.findAccount(accountNumber);
         if (account != null) {
             return account.withdraw(amount);
         }
-        System.err.println("错误：未找到账户 " + accountNumber);
+        System.err.println("Error: Account not found: " + accountNumber);
         return false;
     }
     
     /**
-     * 显示所有用户报告
+     * Display all users report
      */
     public void displayAllUsersReport() {
         System.out.println("\n========================================");
-        System.out.println("           " + bankName + " - 用户报告");
+        System.out.println("           " + bankName + " - User Report");
         System.out.println("========================================");
-        System.out.println("用户总数: " + users.size());
+        System.out.println("Total Users: " + users.size());
         System.out.println("----------------------------------------");
         
         for (User user : users) {
@@ -167,7 +167,7 @@ public class Bank {
     }
     
     /**
-     * 获取银行总资产
+     * Get total assets
      */
     public double getTotalAssets() {
         double total = 0;

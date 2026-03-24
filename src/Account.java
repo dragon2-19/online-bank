@@ -1,5 +1,5 @@
 /**
- * 抽象基类 - 银行账户
+ * Abstract base class - Bank Account
  */
 public abstract class Account {
     protected String accountNumber;
@@ -25,28 +25,28 @@ public abstract class Account {
     }
     
     /**
-     * 存款
-     * @param amount 存款金额
-     * @throws IllegalArgumentException 如果存入负值
+     * Deposit money
+     * @param amount deposit amount
+     * @throws IllegalArgumentException if depositing a negative value
      */
     public void deposit(double amount) {
         if (amount < 0) {
-            throw new IllegalArgumentException("存入金额不能为负数");
+            throw new IllegalArgumentException("Cannot deposit negative amount");
         }
         this.balance += amount;
     }
     
     /**
-     * 取款
-     * @param amount 取款金额
-     * @return 是否取款成功
+     * Withdraw money
+     * @param amount withdrawal amount
+     * @return whether withdrawal was successful
      */
     public boolean withdraw(double amount) {
         if (amount < 0) {
-            throw new IllegalArgumentException("取款金额不能为负数");
+            throw new IllegalArgumentException("Cannot withdraw negative amount");
         }
         if (amount > balance) {
-            System.err.println("错误：账户余额不足");
+            System.err.println("Error: Insufficient balance");
             return false;
         }
         this.balance -= amount;
@@ -54,12 +54,12 @@ public abstract class Account {
     }
     
     /**
-     * 显示账户信息（抽象方法，子类需实现）
+     * Display account information (abstract method, subclasses must implement)
      */
     public abstract void displayAccount();
     
     /**
-     * 获取账户类型
+     * Get account type
      */
     public abstract String getAccountType();
 }
