@@ -1,205 +1,176 @@
-# Online Banking System - Presentation Outline
+# Online Banking System Presentation
 
-## Slide 1: Title Slide
+## Slide 1: Title
 **Online Banking System**
-A Java Object-Oriented Programming Project
+A Java OOP Project
 
 ---
 
-## Slide 2: Table of Contents
-1. Project Overview
-2. System Architecture
-3. Core Classes & Components
-4. Object-Oriented Concepts
-5. Key Features & Functionality
-6. Technical Implementation
-7. Code Examples
-8. Learning Outcomes
+## Slide 2: Project Overview
+- Language: Java
+- Paradigm: Object-Oriented Programming
+- Purpose: Demonstrate OOP concepts through banking application
+- Key Concepts: Inheritance, Polymorphism, Encapsulation
 
 ---
 
-## Slide 3: Project Overview
-- **Project Name**: Online Banking System
-- **Programming Language**: Java
-- **Architecture**: Object-Oriented Programming (OOP)
-- **Purpose**: Demonstrate core OOP principles through a practical banking application
-- **Target Audience**: Java learners, OOP students
-
----
-
-## Slide 4: System Architecture
+## Slide 3: System Architecture
 
 ```
-┌─────────────────────────────────────┐
-│           Bank System               │
-├─────────────────────────────────────┤
-│  ┌─────────┐      ┌─────────────┐  │
-│  │  User   │ ◄──► │    Bank     │  │
-│  └────┬────┘      └──────┬──────┘  │
-│       │                  │         │
-│       │ manages          │         │
-│       ▼                  ▼         │
-│  ┌─────────────────────────────┐  │
-│  │     List<Account>           │  │
-│  └─────────────────────────────┘  │
-└─────────────────────────────────────┘
-         ▲
+                    Bank
+            (manages users)
+                  │
+        ┌─────────┼─────────┐
+        │         │         │
+      User1     User2     User3
+        │         │         │
+    ┌───┴───┐ ┌───┴───┐ ┌───┴───┐
+    │Accounts│ │Accounts│ │Accounts│
+    │  List  │ │  List  │ │  List  │
+    └───┬───┘ └───┬───┘ └───┬───┘
+        │         │         │
+    ┌───┴─────────┴─────────┴───┐
+    │     Account (Abstract)    │
+    │  ─────────────────────── │
+    │  • accountNumber          │
+    │  • balance                │
+    │  • owner (User)           │
+    │  • deposit(), withdraw()  │
+    └───┬─────┬─────┬──────────┘
+        │     │     │
+        │     │     └─ CertificateOfDeposit
+        │     │
+        │     └─── CheckingAccount
+        │
+        └─────── SavingsAccount
+```
+
+---
+
+## Slide 4: Class Diagram
+
+```
+┌─────────────────┐
+│     Bank        │
+├─────────────────┤
+│ - bankName      │
+│ - users         │
+├─────────────────┤
+│ + registerUser()│
+│ + openAccount() │
+│ + deposit()     │
+│ + withdraw()    │
+└────────┬────────┘
+         │ 1
+         │ has
+         │ *
+┌────────▼────────┐
+│     User        │
+├─────────────────┤
+│ - userId        │
+│ - name          │
+│ - accounts      │
+├─────────────────┤
+│ + openAccount() │
+│ + findAccount() │
+└────────┬────────┘
+         │ 1
+         │ has
+         │ *
+┌────────▼─────────────────┐
+│  Account (Abstract)      │
+├──────────────────────────┤
+│ # accountNumber          │
+│ # balance                │
+│ # owner                  │
+├──────────────────────────┤
+│ + deposit()              │
+│ + withdraw()             │
+│ + displayAccount() [abst]│
+│ + getAccountType() [abst]│
+└────────┬─────────────────┘
          │
-         │ inheritance
-         │
-    ┌────┴────┬──────────────┬─────────────┐
-    │         │              │             │
-┌───┴───┐ ┌───┴───┐   ┌─────┴─────┐ ┌──────┴─────┐
-│Saving ││Checking│   │Certificate │ │  Account   │
-│Account││Account │   │of Deposit  │ │ (Abstract) │
-└───────┘└────────┘   └────────────┘ └────────────┘
+    ┌────┴────┬──────────┬
+    │         │          │          
+┌───▼────┐ ┌─▼──────┐ ┌─▼──────┐ 
+│Savings ││Checking ││CD       │
+│Account ││Account  ││Account  │
+└────────┘└─────────┘└─────────┘
 ```
 
 ---
 
-## Slide 5: Core Components Overview
+## Slide 5: Account Hierarchy
 
-### Main Classes:
-1. **Account** (Abstract Base Class)
-2. **SavingsAccount** - Interest-bearing accounts
-3. **CheckingAccount** - Accounts with overdraft protection
-4. **CertificateOfDeposit** - Time-deposit accounts with maturity
-5. **User** - Bank customer with multiple accounts
-6. **Bank** - Central management system
-7. **TestBank** - Demonstration program
+| Class | Type | Key Features |
+|-------|------|--------------|
+| **Account** | Abstract | Base class with common methods |
+| **SavingsAccount** | Subclass | Interest-bearing account |
+| **CheckingAccount** | Subclass | Transaction account |
+| **CertificateOfDeposit** | Subclass | Time-deposit with maturity date |
 
 ---
 
-## Slide 6: Class Hierarchy (UML)
+## Slide 6: Key Classes
 
-```
-                 ┌──────────────────┐
-                 │   <<Abstract>>   │
-                 │     Account      │
-                 ├──────────────────┤
-                 │ # accountNumber  │
-                 │ # balance        │
-                 ├──────────────────┤
-                 │ + deposit()      │
-                 │ + withdraw()     │
-                 │ + displayAccount()│
-                 │ + getAccountType()│
-                 └────────┬─────────┘
-                          │
-        ┌─────────────────┼─────────────────┐
-        │                 │                 │
-  ┌─────┴─────┐   ┌───────┴───────┐   ┌─────┴──────┐
-  │  Savings  │   │   Checking    │   │Certificate │
-  │  Account  │   │   Account     │   │of Deposit  │
-  ├───────────┤   ├───────────────┤   ├────────────┤
-  │ - interest│   │ - overdraft   │   │ - maturity │
-  │   Rate    │   │   Limit       │   │   Date     │
-  ├───────────┤   ├───────────────┤   ├────────────┤
-  │ + withdraw()│ │ + withdraw()  │   │ + isMatured()│
-  └───────────┘   └───────────────┘   └────────────┘
-```
+### 1. Bank
+- Manages all users
+- Handles user registration/removal
+- Central point for account operations
+
+### 2. User
+- Has unique ID and name
+- Owns multiple accounts
+- Can open/close accounts
+
+### 3. Account
+- Abstract base class
+- Contains balance and account number
+- Defines common operations
 
 ---
 
-## Slide 7: Object-Oriented Concepts Demonstrated
+## Slide 7: OOP Concepts Demonstrated
 
-### 1. **Encapsulation**
-- Private data fields with getters/setters
-- Protected members for inheritance access
-- Public methods for interface
+1. **Encapsulation**
+    - Private fields with getters
+    - Protected fields for inheritance
 
-### 2. **Inheritance**
-- Abstract base class `Account`
-- Specialized subclasses: Savings, Checking, CertificateOfDeposit
-- Code reuse and hierarchical design
+2. **Inheritance**
+    - Account hierarchy
+    - Code reuse in subclasses
 
-### 3. **Polymorphism**
-- Method overriding in subclasses
-- Different behaviors for same operation
-- Runtime type binding
+3. **Polymorphism**
+    - Method overriding
+    - Same interface, different implementations
 
-### 4. **Abstraction**
-- Abstract methods in base class
-- Interface separation from implementation
+4. **Abstraction**
+    - Abstract base class
+    - Abstract methods
 
 ---
 
-## Slide 8: Key Features by Account Type
-
-| Account Type | Key Features | Interest | Overdraft | Maturity |
-|--------------|--------------|----------|-----------|----------|
-| **Savings** | Interest-earning | 2% annually | No | N/A |
-| **Checking** | Daily transactions | None | Yes ($100) | N/A |
-| **Certificate** | Fixed-term deposit | Varies | No | Yes |
-
----
-
-## Slide 9: Technical Implementation
-
-### Data Types & Structures:
-- **double**: Account balances, monetary values
-- **String**: Account numbers, user names
-- **LocalDate**: Maturity dates
-- **ArrayList<Account>**: Collection of user accounts
-- **static final**: Constants (interest rates, limits)
-
-### Key Java Features:
-- Exception handling (`IllegalArgumentException`)
-- Enhanced for-loops
-- Static members (user counter)
-- `@Override` annotation
-- Java Collections Framework
-
----
-
-## Slide 10: User Class - Key Code Snippet
-
-```java
-public class User {
-    private static int userCounter = 0;
-    private int userId;
-    private String name;
-    private ArrayList<Account> accounts = new ArrayList<>();
-
-    public User(String name) {
-        this.userId = ++userCounter;
-        this.name = name;
-    }
-
-    public void addAccount(Account account) {
-        accounts.add(account);
-    }
-
-    public void displayAccounts() {
-        System.out.println("\n=== " + name + "'s Accounts ===");
-        for (Account account : accounts) {
-            account.displayAccount();
-        }
-    }
-}
-```
-
----
-
-## Slide 11: Account Class - Abstraction & Inheritance
+## Slide 8: Code Example - Account Class
 
 ```java
 public abstract class Account {
     protected String accountNumber;
     protected double balance;
+    protected User owner;
 
-    public Account(String accountNumber, double balance) {
+    public Account(String accountNumber, double balance, User owner) {
         this.accountNumber = accountNumber;
         this.balance = balance;
+        this.owner = owner;
     }
 
     public void deposit(double amount) {
-        if (amount > 0) {
-            balance += amount;
+        if (amount < 0) {
+            throw new IllegalArgumentException("Cannot deposit negative amount");
         }
+        this.balance += amount;
     }
 
-    public abstract void withdraw(double amount);
     public abstract void displayAccount();
     public abstract String getAccountType();
 }
@@ -207,240 +178,135 @@ public abstract class Account {
 
 ---
 
-## Slide 12: Polymorphism in Action
+## Slide 9: Code Example - User Class
 
 ```java
-// TestBank.java - Demonstration
-public class TestBank {
-    public static void main(String[] args) {
-        Bank bank = new Bank();
+public class User {
+    private String userId;
+    private String name;
+    private List<Account> accounts;
 
-        // Register users and create different account types
-        User user1 = bank.registerUser("John Doe");
-        bank.openSavingsAccount(user1, 1000.0);
-        bank.openCheckingAccount(user1, 500.0);
-        bank.openCertificateOfDeposit(user1, 2000.0, 
-                                      LocalDate.of(2024, 12, 31));
+    public User(String name) {
+        this.userId = "U" + (++userCounter);
+        this.name = name;
+        this.accounts = new ArrayList<>();
+    }
 
-        // Polymorphic behavior
-        user1.displayAccounts();  // Calls different displayAccount()
-                                  // for each account type
+    public void openAccount(Account account) {
+        accounts.add(account);
+    }
+
+    public Account findAccount(String accountNumber) {
+        for (Account account : accounts) {
+            if (account.getAccountNumber().equals(accountNumber)) {
+                return account;
+            }
+        }
+        return null;
     }
 }
 ```
 
 ---
 
-## Slide 13: SavingsAccount - Interest Feature
+## Slide 10: Code Example - Bank Class
 
 ```java
-public class SavingsAccount extends Account {
-    private static final double INTEREST_RATE = 0.02;  // 2%
+public class Bank {
+    private String bankName;
+    private List<User> users;
 
-    public SavingsAccount(String accountNumber, double balance) {
-        super(accountNumber, balance);
+    public User registerUser(String userName) {
+        User user = new User(userName);
+        users.add(user);
+        return user;
     }
 
-    @Override
-    public void withdraw(double amount) {
-        if (amount > 0 && amount <= balance) {
-            balance -= amount;
+    public Account openAccount(User user, String accountType, double balance) {
+        String accountNumber = "ACC" + (++accountCounter);
+        Account account;
+
+        switch (accountType.toLowerCase()) {
+            case "savings":
+                account = new SavingsAccount(accountNumber, balance, user);
+                break;
+            case "checking":
+                account = new CheckingAccount(accountNumber, balance, user);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown account type");
         }
-    }
 
-    @Override
-    public void displayAccount() {
-        System.out.println("Type: Savings Account");
-        System.out.println("Interest Rate: " + (INTEREST_RATE * 100) + "%");
-        System.out.println("Balance: $" + balance);
+        user.openAccount(account);
+        return account;
     }
 }
 ```
 
 ---
 
-## Slide 14: CheckingAccount - Overdraft Protection
-
-```java
-public class CheckingAccount extends Account {
-    private static final double OVERDRAFT_LIMIT = 100.0;
-
-    @Override
-    public void withdraw(double amount) {
-        if (amount > 0 && amount <= balance + OVERDRAFT_LIMIT) {
-            balance -= amount;
-        }
-    }
-
-    @Override
-    public void displayAccount() {
-        System.out.println("Type: Checking Account");
-        System.out.println("Overdraft Limit: $" + OVERDRAFT_LIMIT);
-        System.out.println("Balance: $" + balance);
-    }
-}
-```
-
----
-
-## Slide 15: CertificateOfDeposit - Maturity Check
-
-```java
-public class CertificateOfDeposit extends Account {
-    private LocalDate maturityDate;
-
-    public CertificateOfDeposit(String accountNumber, double balance,
-                                LocalDate maturityDate) {
-        super(accountNumber, balance);
-        this.maturityDate = maturityDate;
-    }
-
-    public boolean isMatured() {
-        return LocalDate.now().isAfter(maturityDate) ||
-               LocalDate.now().equals(maturityDate);
-    }
-
-    @Override
-    public void withdraw(double amount) {
-        if (!isMatured()) {
-            throw new IllegalArgumentException(
-                "Certificate of Deposit has not matured yet!");
-        }
-        if (amount > 0 && amount <= balance) {
-            balance -= amount;
-        }
-    }
-}
-```
-
----
-
-## Slide 16: System Workflow
+## Slide 11: System Workflow
 
 ```
-┌──────────┐
-│ Start    │
-└────┬─────┘
-     │
-     ▼
-┌─────────────┐      ┌─────────────────┐
-│ Bank System │ ◄──► │     User        │
-└──────┬──────┘      └─────────────────┘
+1. Create Bank
        │
-       │ 1. Register User
-       │ 2. Create Account
-       │ 3. Deposit/Withdraw
-       │ 4. Display Info
        ▼
-┌─────────────────────────────────┐
-│   Account Operations Flow       │
-├─────────────────────────────────┤
-│  • Deposit: balance += amount   │
-│  • Withdraw: Check account type │
-│    - Savings: balance >= amount  │
-│    - Checking: balance + limit  │
-│    - CD: Must be matured        │
-└─────────────────────────────────┘
+2. Register Users
+       │
+       ▼
+3. Open Accounts (Savings/Checking/CD)
+       │
+       ▼
+4. Perform Operations
+   • Deposit
+   • Withdraw
+   • Close Account
+       │
+       ▼
+5. View Reports
+   • User account report
+   • Bank total assets
 ```
 
 ---
 
-## Slide 17: Learning Outcomes
+## Slide 12: Key Features
 
-By studying this project, you will understand:
-
-1. **OOP Fundamentals**
-   - Classes, objects, constructors
-   - Access modifiers (private, protected, public)
-
-2. **Inheritance**
-   - Extending classes
-   - Code reuse patterns
-
-3. **Polymorphism**
-   - Method overriding
-   - Dynamic binding
-
-4. **Abstraction**
-   - Abstract classes and methods
-   - Interface design
-
-5. **Advanced Java**
-   - Collections (ArrayList)
-   - Exception handling
-   - Static members
-   - Date/time API
+- User registration with unique IDs
+- Multiple account types per user
+- Deposit and withdraw operations
+- Account balance management
+- Exception handling for invalid operations
+- Account closure functionality
+- Interest application for savings accounts
+- Bank-wide reporting
 
 ---
 
-## Slide 18: Project Benefits
+## Slide 13: Learning Outcomes
 
-### For Students:
-- Real-world application example
-- Hands-on OOP practice
-- Clear code structure
-- Well-documented components
-
-### For Educators:
-- Progressive difficulty
-- Multiple teaching points
-- Demonstrates best practices
-- Extendable architecture
+✓ Understanding of Java classes and objects
+✓ Inheritance and abstract classes
+✓ Method overriding and polymorphism
+✓ Collection framework (ArrayList)
+✓ Exception handling
+✓ Static members
+✓ Access modifiers (public, private, protected)
 
 ---
 
-## Slide 19: Extension Ideas
+## Slide 14: Conclusion
 
-Potential enhancements for learning:
+The Online Banking System demonstrates:
+- Real-world OOP application
+- Clean class hierarchy
+- Proper encapsulation
+- Effective use of inheritance and polymorphism
 
-1. **Add Transaction History**
-   - Track all deposits/withdrawals
-   - Generate statements
-
-2. **Implement Interest Calculation**
-   - Calculate monthly/quarterly interest
-   - Apply to savings accounts
-
-3. **Add Security Features**
-   - PIN authentication
-   - Transaction limits
-
-4. **Bank Database Integration**
-   - JDBC for persistent storage
-   - SQL data management
-
-5. **GUI Application**
-   - Swing or JavaFX interface
-   - Interactive banking operations
+**Perfect for learning Java OOP!**
 
 ---
 
-## Slide 20: Conclusion
+## Slide 15: Q&A
 
-### Summary:
-- The Online Banking System is an excellent **OOP learning project**
-- Demonstrates all core object-oriented principles
-- Provides practical, real-world context
-- Clean, maintainable code structure
-
-### Next Steps:
-- Experiment with the code
-- Try the extension ideas
-- Build your own variations
-- Apply concepts to new projects
-
----
-
-## Slide 21: Q&A
-
-**Questions?**
-
----
-
-## Slide 22: Thank You
-
-**Online Banking System**
-*A Practical Java OOP Learning Project*
-
-Email: your.email@example.com
-Project Repository: github.com/your-repo/online-banking
+Questions?
